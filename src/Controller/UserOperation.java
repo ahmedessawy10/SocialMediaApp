@@ -27,9 +27,10 @@ public class UserOperation {
           db.close() ; 
           return false ;
     }
-    public void login(String email , String password){
-        
-        
+    public boolean login(String email , String password) throws SQLException{
+        ResultSet result = db.executequery(String.format("SELECT * FROM User WHERE Email='%s' AND Password='%s'" , email , password)) ;  ; 
+        return result.next() ; 
+    
     }
     
 }
