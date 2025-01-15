@@ -1,6 +1,7 @@
 package Controller;
 
 import Database.Db;
+import Model.UserProfile;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -28,7 +29,16 @@ public class UserOperation {
           return false ;
     }
     public boolean login(String email , String password) throws SQLException{
-        ResultSet result = db.executequery(String.format("SELECT * FROM User WHERE Email='%s' AND Password='%s'" , email , password)) ;  ; 
+        ResultSet result = db.executequery(String.format("SELECT * FROM User WHERE Email='%s' AND Password='%s'" , email , password)) ;  
+        while(result.next()){
+            UserProfile.user.setName(result.getString("UserName"));
+            UserProfile.user.setEmail(result.getString("Email")); 
+            UserProfile.user.setStreet(result.getString("Street")); 
+            UserProfile.user.setCity(result.getString("City"));
+            UserProfile.user.setCountry(result.getString("Country"));
+        } 
+            
+        
         return result.next() ; 
     
     }
