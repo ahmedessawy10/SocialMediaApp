@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 13, 2025 at 08:35 AM
+-- Generation Time: Jan 15, 2025 at 11:36 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -89,6 +89,16 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`ID`, `UserName`, `Email`, `Password`, `ProfilePicture`, `Bio`, `Country`, `City`, `Street`) VALUES
+(3, 'OsamaHelal2024', 'OsamaHelal2024@gmail.com', '1234', NULL, NULL, NULL, '', ''),
+(4, 'moohamed', 'ana@gmail.com', 'hassan', NULL, NULL, 'egypt', 'Cairo', 'hat'),
+(5, 'helal', 'ana2@gmail.com', 'galkjgdlkjg', NULL, NULL, 'fdlkjsfjkdf', 'sdfkljdf', 'dsfkljkjdlf'),
+(6, 'sdfkljlkjf', 'osamaHelal2023@gmail.com', 'fjfjf', NULL, NULL, 'dfnbdfnmdbf', 'fdklsjfdjkldf', 'ddfjkdhkhdf');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -127,6 +137,22 @@ ALTER TABLE `user`
   ADD PRIMARY KEY (`ID`),
   ADD UNIQUE KEY `Email` (`Email`),
   ADD UNIQUE KEY `Password` (`Password`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `posts`
+--
+ALTER TABLE `posts`
+  MODIFY `PostID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
