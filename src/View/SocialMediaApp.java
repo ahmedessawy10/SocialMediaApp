@@ -1,5 +1,9 @@
 package View;
 
+import Controller.UserOperation;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class SocialMediaApp extends Application {
@@ -18,6 +23,7 @@ public class SocialMediaApp extends Application {
     private String username = "Bob Smith";
     private String bio = "Hello! I'm Bob. Welcome to my profile.";
     private BorderPane mainLayout;
+    UserOperation operation = new UserOperation() ; 
 
     @Override
     public void start(Stage primaryStage) {
@@ -50,7 +56,7 @@ public class SocialMediaApp extends Application {
         return welcomeBox;
     }
 
-    private VBox createRegistrationScene(Stage primaryStage) {
+    private VBox createRegistrationScene(Stage primaryStage)  {
         VBox registrationBox = new VBox(20);
         registrationBox.setPadding(new Insets(30));
         registrationBox.setAlignment(Pos.CENTER);
@@ -88,7 +94,18 @@ public class SocialMediaApp extends Application {
                 cityField.getText().isEmpty() || streetField.getText().isEmpty()) {
                 errorLabel.setText("All fields are required.");
             } else {
-                primaryStage.setScene(new Scene(createLoginScene(primaryStage), 900, 600));
+                try {
+                    //                primaryStage.setScene(new Scene(createLoginScene(primaryStage), 900, 600));
+                    if(operation.registration("user",usernameField.getText() , emailField.getText() , passwordField.getText() ,streetField.getText() , cityField.getText(),countryField.getText() )){
+                     primaryStage.setScene(new Scene(createLoginScene(primaryStage), 900, 600));   
+                    }
+                    else {
+                        Text errorText = new Text() ; 
+                        errorText.setText("that mail you set it before");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(SocialMediaApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
@@ -110,7 +127,7 @@ public class SocialMediaApp extends Application {
         titleLabel.setTextFill(Color.BLUE);
 
         TextField usernameField = new TextField();
-        usernameField.setPromptText("Username");
+        usernameField.setPromptText("Email");
 
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Password");
