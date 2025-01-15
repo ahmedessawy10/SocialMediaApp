@@ -96,12 +96,19 @@ public class SocialMediaApp extends Application {
             } else {
                 try {
                     //                primaryStage.setScene(new Scene(createLoginScene(primaryStage), 900, 600));
-                    if(operation.registration("user",usernameField.getText() , emailField.getText() , passwordField.getText() ,streetField.getText() , cityField.getText(),countryField.getText() )){
+                    if(operation.registration(
+                            usernameField.getText() , 
+                            emailField.getText() , 
+                            passwordField.getText() ,
+                            streetField.getText() , 
+                            cityField.getText(),
+                            countryField.getText() )){
                      primaryStage.setScene(new Scene(createLoginScene(primaryStage), 900, 600));   
                     }
                     else {
                         Text errorText = new Text() ; 
                         errorText.setText("that mail you set it before");
+                        registrationBox.getChildren().add(errorText) ; 
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(SocialMediaApp.class.getName()).log(Level.SEVERE, null, ex);
