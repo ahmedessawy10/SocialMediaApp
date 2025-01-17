@@ -9,6 +9,7 @@ package Model;
  *
  * @author Hima
  */
-public class UserProfile {
+public  class UserProfile {
+    public static User user  ; 
     
 }
