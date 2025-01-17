@@ -96,12 +96,19 @@ public class SocialMediaApp extends Application {
             } else {
                 try {
                     //                primaryStage.setScene(new Scene(createLoginScene(primaryStage), 900, 600));
-                    if(operation.registration("user",usernameField.getText() , emailField.getText() , passwordField.getText() ,streetField.getText() , cityField.getText(),countryField.getText() )){
+                    if(operation.registration(
+                            usernameField.getText() , 
+                            emailField.getText() , 
+                            passwordField.getText() ,
+                            streetField.getText() , 
+                            cityField.getText(),
+                            countryField.getText() )){
                      primaryStage.setScene(new Scene(createLoginScene(primaryStage), 900, 600));   
                     }
                     else {
                         Text errorText = new Text() ; 
                         errorText.setText("that mail you set it before");
+                        registrationBox.getChildren().add(errorText) ; 
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(SocialMediaApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -126,25 +133,49 @@ public class SocialMediaApp extends Application {
         titleLabel.setFont(Font.font("Verdana", 30));
         titleLabel.setTextFill(Color.BLUE);
 
-        TextField usernameField = new TextField();
-        usernameField.setPromptText("Email");
+        TextField emailField = new TextField();
+        emailField.setPromptText("Email");
 
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Password");
 
         Label errorLabel = new Label();
         errorLabel.setTextFill(Color.RED);
-
+         
         Button loginButton = new Button("Login");
-        loginButton.setOnAction(e -> {
-            mainLayout = createMainLayout(createProfileScene());
-            primaryStage.setScene(new Scene(mainLayout, 900, 600));
-        });
-
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> primaryStage.setScene(new Scene(createWelcomeScene(primaryStage), 900, 600)));
 
-        loginBox.getChildren().addAll(titleLabel, usernameField, passwordField, loginButton, backButton, errorLabel);
+        loginBox.getChildren().addAll(titleLabel, emailField, passwordField, loginButton, backButton, errorLabel);
+        loginButton.setOnAction(e -> {
+             if(!emailField.getText().isEmpty() && !passwordField.getText().isEmpty()){
+                  try { 
+                      if(operation.login(emailField.getText(), passwordField.getText())){
+                        mainLayout = createMainLayout(createProfileScene());
+            primaryStage.setScene(new Scene(mainLayout, 900, 600));
+                      }
+                      else {
+                 
+                Text errorText = new Text("there's error on the email or the password") ; 
+                
+                loginBox.getChildren().add(errorText) ; 
+             }
+                      
+                  } catch (SQLException ex) {
+                      Logger.getLogger(SocialMediaApp.class.getName()).log(Level.SEVERE, null, ex);
+                  }
+              
+              }
+             else {
+                 Text requriedText = new Text("you didn't insert in some field") ; 
+                  loginBox.getChildren().add(requriedText) ; 
+             }
+             
+           
+        });
+
+//        Button backButton = new Button("Back");
+        
         return loginBox;
     }
 

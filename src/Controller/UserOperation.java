@@ -1,6 +1,7 @@
 package Controller;
 
 import Database.Db;
+import Model.UserProfile;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -10,63 +11,37 @@ public class UserOperation {
     
    
     
-     public boolean registration(String tableName , String userName , String email  ,String password) throws SQLException{
-//        
-//          ResultSet result = db.executequery(String.format("SELECT * FROM %s where Email = '%s' ", tableName , email )) ; 
-//          if (result.next() == false){
-//          int affectedRow = db.executeupdate(String.format("INSERT INTO %s (UserName , Email , Password) VALUES('%s' , '%s' , '%s')",tableName,userName , email,password));    
-//          db.close() ; 
-//          return true ; 
-//          }
-//          db.close() ; 
-//          return false ;
- // Correctly format the email within single quotes
-    ResultSet result = db.executequery(String.format("SELECT * FROM %s WHERE Email = '%s'", tableName, email)); 
 
-    if (result.next() == false) {
-        // If no user exists with the given email, insert a new user
-        int affectedRow = db.executeupdate(String.format("INSERT INTO %s (UserName, Email, Password) VALUES('%s', '%s', '%s')", tableName, userName, email, password));
-        db.close();
-        return true;
-    }
-
-    db.close();
-    return false;
-    }
-    public boolean registration(String tableName , String userName , String email  ,String password , String street) throws SQLException{
-        ResultSet result = db.executequery(String.format("SELECT * FROM %s where Email = '%s' ", tableName , email )) ; 
+    public boolean registration( String userName , String email  ,String password , String street , String city , String country) throws SQLException{
+        ResultSet result = db.executequery(String.format("SELECT * FROM User where Email = '%s' ",email )) ; 
           if (result.next() == false){
-          int affectedRow = db.executeupdate(String.format("INSERT INTO %s (UserName , Email , Password , Street) VALUES('%s' , '%s' , '%s' , '%s')",tableName,userName , email,password , street));    
-          db.close();
-          return true ; 
-          }
-          db.close() ; 
-          return false ;
-    }
-    public boolean  registration( String tableName, String userName , String email  ,String password , String street , String city) throws SQLException{
-        ResultSet result = db.executequery(String.format("SELECT * FROM %s where Email = '%s' ", tableName , email )) ; 
-          if (result.next() == false){
-          int affectedRow = db.executeupdate(String.format("INSERT INTO %s (UserName , Email , Password , Street) VALUES('%s' , '%s' , '%s' , '%s' , '%s')",tableName,userName , email,password , street , city));    
-          db.close();
-          return true ; 
-          }
-          db.close() ; 
-          return false ;
-        
-    }
-    public boolean registration(String tableName , String userName , String email  ,String password , String street , String city , String country) throws SQLException{
-        ResultSet result = db.executequery(String.format("SELECT * FROM %s where Email = '%s' ", tableName , email )) ; 
-          if (result.next() == false){
-          int affectedRow = db.executeupdate(String.format("INSERT INTO %s (UserName , Email , Password , Street) VALUES('%s' , '%s' , '%s' , '%s' , '%s' , '%s')",tableName,userName , email,password , street , city , country));    
+          int affectedRow = db.executeupdate(String.format("INSERT INTO User (UserName , Email , Password , Street ,City , Country ) VALUES('%s' , '%s' , '%s' , '%s' , '%s' , '%s')",
+                  userName /*1*/ , 
+                  email/*2*/,
+                  password/*3*/ , 
+                  street/*4*/ , 
+                  city/*5*/ , 
+                  country/*6*/));    
           db.close() ; 
           return true ; 
           }
           db.close() ; 
           return false ;
     }
-    public void login(String email , String password){
+    public boolean login(String email , String password) throws SQLException{
+        ResultSet result = db.executequery(String.format("SELECT * FROM User WHERE Email='%s' AND Password='%s'" , email , password)) ;  
+        while(result.next()){
+            UserProfile.user.setId(result.getInt("ID"));
+            UserProfile.user.setName(result.getString("UserName"));
+            UserProfile.user.setEmail(result.getString("Email")); 
+            UserProfile.user.setStreet(result.getString("Street")); 
+            UserProfile.user.setCity(result.getString("City"));
+            UserProfile.user.setCountry(result.getString("Country"));
+        } 
+            
         
-        
+        return result.next() ; 
+    
     }
     
 }
