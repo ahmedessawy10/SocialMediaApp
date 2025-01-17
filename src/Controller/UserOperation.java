@@ -36,6 +36,7 @@ public class UserOperation {
     if (UserProfile.user == null) {
         UserProfile.user = new User();
     }
+    UserProfile.user.setId(result.getInt("ID"));
     UserProfile.user.setName(result.getString("UserName"));
     UserProfile.user.setEmail(result.getString("Email")); 
     UserProfile.user.setStreet(result.getString("Street")); 
