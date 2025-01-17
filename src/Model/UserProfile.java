@@ -10,6 +10,6 @@ package Model;
  * @author Hima
  */
 public  class UserProfile {
-    public static User user  ; 
+    public static User user = new User()  ; 
     
 }

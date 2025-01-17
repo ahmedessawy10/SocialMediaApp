@@ -150,6 +150,7 @@ public class SocialMediaApp extends Application {
         loginButton.setOnAction(e -> {
              if(!emailField.getText().isEmpty() && !passwordField.getText().isEmpty()){
                   try { 
+                      
                       if(operation.login(emailField.getText(), passwordField.getText())){
                         mainLayout = createMainLayout(createProfileScene());
             primaryStage.setScene(new Scene(mainLayout, 900, 600));
