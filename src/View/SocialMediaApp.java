@@ -225,31 +225,65 @@ private VBox createProfileScene() {
     profileBox.setPadding(new Insets(20));
     profileBox.setStyle("-fx-background-color: #dfe3ee;");
 
-    // Add Profile Picture
-    Image profileImage = new Image("https://example.com/your-profile-image.jpg");  // Replace with your actual image URL or file path
+    // Simulated user data
+    String userName = "John Doe";  // Example user name, replace with actual data
+    String bio = "Software Developer | Coffee Enthusiast | Avid Reader";  // Example bio, replace with actual data
+    String profileImageUrl = "https://example.com/your-profile-image.jpg";  // URL of the profile image
+
+    // Profile image
+    Image profileImage = new Image(profileImageUrl);
     ImageView profileImageView = new ImageView(profileImage);
-    profileImageView.setFitWidth(100);  // Set image width
-    profileImageView.setFitHeight(100); // Set image height
-    profileImageView.setStyle("-fx-background-radius: 50%; -fx-border-radius: 50%; -fx-border-color: #B0C4DE;");
+    profileImageView.setFitWidth(120);  // Adjust width for a more realistic profile picture size
+    profileImageView.setFitHeight(120);  // Adjust height for a more realistic profile picture size
+    profileImageView.setPreserveRatio(true);  // Maintain aspect ratio of the image
 
-    // Title for Profile
-    Label title = new Label("My Profile");
-    title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #3b5998;");
+    // Username
+    Label userNameLabel = new Label(userName);
+    userNameLabel.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #3b5998;");
 
-    // Bio
+    // Bio label
     Label bioLabel = new Label(bio);
-    bioLabel.setWrapText(true);
+    bioLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #666;");
+    bioLabel.setWrapText(true);  // Allow bio text to wrap if it's long
 
-    // Posts List
+    // New post field
+    TextField newPostField = new TextField();
+    newPostField.setPromptText("What's on your mind?");
+    newPostField.setPrefWidth(400);
+
+    // Post button
+    Button postButton = new Button("Post");
+    postButton.setStyle("-fx-background-color: #3b5998; -fx-text-fill: white; -fx-font-size: 14px;");
+
+    // VBox to hold posts
     VBox postsList = new VBox(10);
     postsList.setPadding(new Insets(10));
 
-    postsList.getChildren().addAll(
-            createPostWidget("User 1", "This is my first post!", "10 likes", "5 comments"),
-            createPostWidget("User 2", "What a beautiful day!", "20 likes", "8 comments")
-    );
+    // Action when Post button is clicked
+    postButton.setOnAction(e -> {
+        String newPostText = newPostField.getText();
+        
+        if (newPostText.isEmpty()) {
+            // You could show a message or just ignore the click
+            System.out.println("Please enter a post before submitting.");
+        } else {
+            // Create a label for the new post and add it to the posts list
+            Label newPostLabel = new Label(newPostText);
+            newPostLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
+            postsList.getChildren().add(newPostLabel);
+            
+            // Clear the input field after posting
+            newPostField.clear();
+        }
+    });
 
-    profileBox.getChildren().addAll(profileImageView, title, bioLabel, postsList);
+    // HBox for new post creation (TextField + Button)
+    HBox postCreationBox = new HBox(10, newPostField, postButton);
+    postCreationBox.setAlignment(Pos.CENTER);
+
+    // Add all elements to the profileBox
+    profileBox.getChildren().addAll(profileImageView, userNameLabel, bioLabel, postCreationBox, postsList);
+    
     return profileBox;
 }
 
@@ -266,12 +300,19 @@ private VBox createProfileScene() {
 
         HBox statsBox = new HBox(10);
         statsBox.setAlignment(Pos.CENTER_LEFT);
-        statsBox.getChildren().addAll(new Label(likes), new Label(comments));
+        Label likeCountLabel = new Label(likes);
+        Button likeButton = new Button("Like");
+        likeButton.setOnAction(e -> {
+            int likeCount = Integer.parseInt(likes.split(" ")[0]) + 1;
+            likeCountLabel.setText(likeCount + " likes");
+        });
+
+        statsBox.getChildren().addAll(likeCountLabel, new Label(comments), likeButton);
 
         postBox.getChildren().addAll(usernameLabel, contentLabel, statsBox);
         return postBox;
     }
-
+    
     private VBox createFriendsScene() {
         VBox friendsBox = new VBox(20);
         friendsBox.setPadding(new Insets(30));
@@ -309,7 +350,7 @@ private VBox createProfileScene() {
         postsBox.getChildren().addAll(title, scrollPane);
         return postsBox;
     }
-
+    
     private VBox createPostWithLikeButton(String username, String content, String likes, String comments) {
         VBox postBox = new VBox(10);
         postBox.setPadding(new Insets(10));
