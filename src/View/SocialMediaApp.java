@@ -1,6 +1,8 @@
 package view;
 
 import Controller.UserOperation;
+import Model.User;
+import Model.UserProfile;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -211,7 +213,13 @@ public class SocialMediaApp extends Application {
                 () -> mainLayout.setCenter(createPostsScene()));
 
         Button friendsButton = createSidebarButton("Friends", "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-                () -> mainLayout.setCenter(createFriendsScene()));
+                () -> {
+            try {
+                mainLayout.setCenter(createFriendsScene());
+            } catch (SQLException ex) {
+                Logger.getLogger(SocialMediaApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
 
         Button logoutButton = createSidebarButton("Logout", "https://cdn-icons-png.flaticon.com/512/1828/1828479.png",
                 () -> System.exit(0));
@@ -471,7 +479,7 @@ public class SocialMediaApp extends Application {
         return postBox;
     }
 
-    private VBox createFriendsScene() {
+    private VBox createFriendsScene() throws SQLException {
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
         
         VBox friendsBox = new VBox(20);
@@ -491,8 +499,8 @@ public class SocialMediaApp extends Application {
                                 "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);");
 
         // Sample friends
-        String[] friends = {"Alice", "Bob", "Charlie", "David"};
-        for (String friend : friends) {
+        
+        for (User friend : operation.viewFriends(UserProfile.user.getId())) {
             HBox friendItem = new HBox(10);
             friendItem.setAlignment(Pos.CENTER_LEFT);
             friendItem.setPadding(new Insets(10));
@@ -502,7 +510,7 @@ public class SocialMediaApp extends Application {
             friendAvatar.setFitHeight(40);
             friendAvatar.setStyle("-fx-background-radius: 50%;");
 
-            Label friendName = new Label(friend);
+            Label friendName = new Label(friend.getName());
             friendName.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1c1e21;");
 
             Region spacer = new Region();

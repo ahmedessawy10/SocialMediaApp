@@ -3,12 +3,15 @@ package Controller;
 import Database.Db;
 import Model.User;
 import Model.UserProfile;
+import com.mysql.cj.protocol.Resultset;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 public class UserOperation {
     Db db = new Db() ;
+    ArrayList<User> friends=  new ArrayList<User>() ; 
     
    
     
@@ -46,5 +49,20 @@ public class UserOperation {
 return false; 
     
     }
+    
+    public ArrayList<User> viewFriends(int userID) throws SQLException{
+       ResultSet result =  db.executequery(String.format("SELECT ID   , UserName FROM User WHERE ID !=%s ", userID)) ; 
+       while(result.next()){
+           User friend = new User() ; 
+            friend.setName(result.getString("UserName")) ; 
+            friend.setId(result.getInt("ID")); 
+            friends.add(friend) ; 
+       }
+        return friends; 
+       
+    
+    
+    }
+    
     
 }
